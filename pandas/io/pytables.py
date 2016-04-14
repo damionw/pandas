@@ -1220,10 +1220,10 @@ class HDFStore(StringMixin):
             self._handle.remove_node(group, recursive=True)
             group = None
 
-        # we don't want to store a table node at all if are object is 0-len
-        # as there are not dtypes
+        # We allow storing zero length table nodes, but produce a warning message
+        # FUTURE: dtypes should be gleaned from dataframe metadata
         if getattr(value, 'empty', None) and (format == 'table' or append):
-            return
+            warnings.warn("Writing empty dataset")
 
         if group is None:
             paths = key.split('/')
